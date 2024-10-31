@@ -6,7 +6,7 @@ use std::{
 
 use regex::Regex;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, serde::Serialize)]
 struct MovieEntry {
     id: String,
     user: String,
@@ -77,7 +77,8 @@ fn process(entry: &fs::DirEntry) {
         }
     }
     if let Some(entry) = MovieEntry::from_path(path) {
-        println!("{:?}", entry)
+        let j = serde_json::to_string(&entry).expect("JSON serialization failed");
+        println!("{}", j)
     }
 }
 
