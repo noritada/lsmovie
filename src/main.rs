@@ -72,13 +72,15 @@ fn process(entry: &fs::DirEntry) {
     let path = entry.path();
     if let Some(ext) = path.extension() {
         if !EXTENSIONS.contains(&ext.to_str().unwrap_or_default()) {
-            eprintln!("ignored: {:?}", path);
+            eprintln!("ignored: {:?}", &path);
             return;
         }
     }
-    if let Some(entry) = MovieEntry::from_path(path) {
+    if let Some(entry) = MovieEntry::from_path(&path) {
         let j = serde_json::to_string(&entry).expect("JSON serialization failed");
         println!("{}", j)
+    } else {
+        eprintln!("movie info extraction failed: {:?}", &path)
     }
 }
 
